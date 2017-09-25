@@ -11,7 +11,7 @@ public class GameThread extends Thread {
 
     public GameThread(GameSurface gameSurface, SurfaceHolder surfaceHolder)  {
         this.gameSurface= gameSurface;
-        this.surfaceHolder= surfaceHolder;
+        this.surfaceHolder = surfaceHolder;
         delay = 10;
     }
 
@@ -28,7 +28,7 @@ public class GameThread extends Thread {
                 surfaceHolder.unlockCanvasAndPost(canvas);
             }
             try {
-                Thread.sleep((long) delay);
+                Thread.sleep(delay);
             } catch(InterruptedException e) {
                 e.printStackTrace();
             }

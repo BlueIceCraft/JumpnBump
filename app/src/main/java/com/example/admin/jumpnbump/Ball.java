@@ -9,9 +9,9 @@ import static android.content.Context.SENSOR_SERVICE;
 
 public class Ball extends GameObject {
     private static final int X_AXIS = 250;
-    public static final float GRAVITY = 0.20f;
+    public static final float GRAVITY = 0.05f;
     private Bitmap image;
-    private boolean onGround = false;
+    private boolean onGround;
     private long lastDrawNanoTime = -1;
     private GameSurface gameSurface;
     private float velocityY = 0;
@@ -26,13 +26,12 @@ public class Ball extends GameObject {
 
     public void update()  {
         long now = System.nanoTime();
-        int newBottom = gameSurface.getHeight() - height;
+        int newBottom = gameSurface.getHeight() - getHeight();
 
         if(lastDrawNanoTime == -1) {
             lastDrawNanoTime = now;
         }
         int deltaTime = (int) ((now - lastDrawNanoTime)/ 2000000);
-        System.out.println(deltaTime);
 
         velocityY += GRAVITY * deltaTime;
         y += velocityY * deltaTime;
@@ -40,13 +39,11 @@ public class Ball extends GameObject {
 
         if(y < 0 )  {
             y = 0;
-            //System.out.println("trying to go above");
         }
 
         else if(y > newBottom)  {
             y = newBottom;
             onGround = true;
-            //System.out.println("trying to go below");
         }
     }
 
@@ -57,9 +54,9 @@ public class Ball extends GameObject {
     }
 
     public void jump() {
+        float jumpForce = -10f;
         if(onGround) {
-            velocityY = -15f;
-            System.out.println("trying to jump");
+            velocityY = jumpForce;
             onGround = false;
         }
     }

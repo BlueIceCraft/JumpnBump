@@ -3,39 +3,40 @@ package com.example.admin.jumpnbump;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
+import java.util.Random;
+
 public class Obstacle extends GameObject {
 
-    public static final float VELOCITY = 1f;
     private Bitmap image;
 
     private long lastDrawNanoTime = -1;
     private GameSurface gameSurface;
+    private Random rd;
+    private float speed;
 
-    public Obstacle(GameSurface gameSurface, Bitmap image, int x, int y) {
+    public Obstacle(GameSurface gameSurface, Bitmap image, int x, int y, float speed) {
         super(image, x, y);
         this.gameSurface = gameSurface;
         this.image = image;
+        this.speed = speed;
+        rd = new Random();
     }
 
     public void update() {
         long now = System.nanoTime();
-        int newBottom = gameSurface.getHeight() - height;
 
         if (lastDrawNanoTime == -1) {
             lastDrawNanoTime = now;
         }
         int deltaTime = (int) ((now - lastDrawNanoTime) / 2000000);
 
-        float distance = VELOCITY * deltaTime;
+        float distance = speed * deltaTime;
         this.x -= distance;
 
-        if (this.x < 0) {
-            this.x = 0;
+        if (x < 0 - getWidth() - 100) {
+            int pixels = (int) (200 + rd.nextInt(200) * 2f);
+            x = gameSurface.getWidth() + pixels;
         }
-        else if (this.x > newBottom) {
-            this.x = newBottom;
-        }
-
     }
 
     public void draw(Canvas canvas) {
