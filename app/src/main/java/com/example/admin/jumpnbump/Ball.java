@@ -23,7 +23,7 @@ public class Ball extends GameObject {
         long now = System.nanoTime();
         int newHeight = gameSurface.getHeight() - height;
 
-        if(lastDrawNanoTime==-1) {
+        if(lastDrawNanoTime == -1) {
             lastDrawNanoTime= now;
         }
         int deltaTime = (int) ((now - lastDrawNanoTime)/ 1000000);
@@ -32,13 +32,15 @@ public class Ball extends GameObject {
 
         double movingVectorLength = Math.sqrt(yAcc*yAcc);
 
-        this.y = y +  (int)(distance* yAcc / movingVectorLength);
+        if(canJump) {
+            this.y += (int)(distance* yAcc / movingVectorLength);
+            canJump = false;
+        }
 
         if(this.y < 0 )  {
             this.y = 0;
             this.yAcc = - this.yAcc;
-        }
-        else if(this.y > this.gameSurface.getHeight()- height)  {
+        } else if(this.y > this.gameSurface.getHeight()- height)  {
             this.y= this.gameSurface.getHeight()- height;
             this.yAcc = - this.yAcc ;
         }
@@ -47,7 +49,6 @@ public class Ball extends GameObject {
     public void draw(Canvas canvas)  {
         Bitmap image = this.image;
         canvas.drawBitmap(image,X_AXIS, y, null);
-        System.out.println(y);
         this.lastDrawNanoTime= System.nanoTime();
     }
 
