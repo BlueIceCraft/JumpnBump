@@ -5,14 +5,12 @@ import android.graphics.Canvas;
 
 public class Ball extends GameObject {
     private static final int X_AXIS = 250;
-    public static final float VELOCITY = 0.5f;
+    public static final float GRAVITY = 0.20f;
     private Bitmap image;
-    private boolean canJump = false;
-    private float gravity = 10;
-
-    private int yAcc = 1;
+    private boolean onGround = false;
     private long lastDrawNanoTime = -1;
     private GameSurface gameSurface;
+    private float velocityY = 0;
 
     public Ball(GameSurface gameSurface, Bitmap image, int y) {
         super(image,X_AXIS, y);
@@ -22,28 +20,27 @@ public class Ball extends GameObject {
 
     public void update()  {
         long now = System.nanoTime();
-        int newHeight = gameSurface.getHeight() - height;
+        int newBottom = gameSurface.getHeight() - height;
 
         if(lastDrawNanoTime == -1) {
-            lastDrawNanoTime= now;
+            lastDrawNanoTime = now;
         }
-        int deltaTime = (int) ((now - lastDrawNanoTime)/ 1000000);
-        float distance = VELOCITY * deltaTime;
-        double movingVectorLength = Math.sqrt(yAcc*yAcc);
+        int deltaTime = (int) ((now - lastDrawNanoTime)/ 2000000);
+        System.out.println(deltaTime);
 
-        if(canJump) {
+        velocityY += GRAVITY * deltaTime;
+        y += velocityY * deltaTime;
 
-            canJump = false;
+
+        if(y < 0 )  {
+            y = 0;
+            //System.out.println("trying to go above");
         }
 
-        y =  y * yAcc + (int) gravity;
-
-        if(this.y < 0 )  {
-            this.y = 0;
-            this.yAcc = - this.yAcc;
-        } else if(this.y > this.gameSurface.getHeight()- height)  {
-            this.y= this.gameSurface.getHeight()- height;
-            this.yAcc = - this.yAcc ;
+        else if(y > newBottom)  {
+            y = newBottom;
+            onGround = true;
+            //System.out.println("trying to go below");
         }
     }
 
@@ -54,7 +51,11 @@ public class Ball extends GameObject {
     }
 
     public void jump() {
-        canJump = true;
+        if(onGround) {
+            velocityY = -15f;
+            System.out.println("trying to jump");
+            onGround = false;
+        }
     }
 }
 
