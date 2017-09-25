@@ -5,14 +5,14 @@ import android.graphics.Canvas;
 
 public class Obstacle extends GameObject {
 
-    public static final float VELOCITY = 1.3f;
+    public static final float VELOCITY = 1f;
     private Bitmap image;
 
     private long lastDrawNanoTime = -1;
     private GameSurface gameSurface;
 
-    public Obstacle(GameSurface gameSurface, Bitmap image, int x, int yAchse) {
-        super(image, x, yAchse);
+    public Obstacle(GameSurface gameSurface, Bitmap image, int x, int y) {
+        super(image, x, y);
         this.gameSurface = gameSurface;
         this.image = image;
     }
@@ -40,7 +40,7 @@ public class Obstacle extends GameObject {
 
     public void draw(Canvas canvas) {
         Bitmap image = this.image;
-        canvas.drawBitmap(image, 4, y, null);
+        canvas.drawBitmap(image, x, y, null);
         this.lastDrawNanoTime = System.nanoTime();
     }
 }

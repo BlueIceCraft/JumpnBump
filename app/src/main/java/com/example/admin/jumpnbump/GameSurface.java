@@ -15,7 +15,7 @@ import android.view.SurfaceView;
 public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
     private GameThread gameThread;
     private Ball ball;
-    private Obstacle spike_obstacle;
+    private Obstacle obstacle;
     private SensorManager sensorManager;
     private Sensor rotationVectorSensor;
 
@@ -29,24 +29,24 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update()  {
         ball.update();
-        this.spike_obstacle.update();
+        this.obstacle.update();
     }
 
     @Override
     public void draw(Canvas canvas)  {
         super.draw(canvas);
         ball.draw(canvas);
-        this.spike_obstacle.draw(canvas);
+        this.obstacle.draw(canvas);
 
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        Bitmap BallBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ball);
-        ball = new Ball(this, BallBitmap, 0);
+        Bitmap ballBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ball);
+        ball = new Ball(this, ballBitmap, 0);
 
-        Bitmap spike_obstacleBitmap = BitmapFactory.decodeResource(this.getResources(),R.drawable.spike_obstacle);
-        this.spike_obstacle = new Obstacle(this,spike_obstacleBitmap,1000, 0);
+        Bitmap spikeBitmap = BitmapFactory.decodeResource(this.getResources(),R.drawable.green_obstacle);
+        this.obstacle = new Obstacle(this,spikeBitmap,1000, 600);
 
         gameThread = new GameThread(this,holder);
         gameThread.setRunning(true);
