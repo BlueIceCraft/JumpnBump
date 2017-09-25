@@ -8,6 +8,7 @@ public class Ball extends GameObject {
     public static final float VELOCITY = 0.5f;
     private Bitmap image;
     private boolean canJump = false;
+    private float gravity = 10;
 
     private int yAcc = 1;
     private long lastDrawNanoTime = -1;
@@ -31,9 +32,11 @@ public class Ball extends GameObject {
         double movingVectorLength = Math.sqrt(yAcc*yAcc);
 
         if(canJump) {
-            this.y += (int)(distance* yAcc / movingVectorLength);
+
             canJump = false;
         }
+
+        y =  y * yAcc + (int) gravity;
 
         if(this.y < 0 )  {
             this.y = 0;
