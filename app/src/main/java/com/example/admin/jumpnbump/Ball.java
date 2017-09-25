@@ -5,13 +5,12 @@ import android.graphics.Canvas;
 
 public class Ball extends GameObject {
     private static final int X_AXIS = 250;
-    public static final float GRAVITY = 20f;
+    public static final float GRAVITY = 0.20f;
     private Bitmap image;
     private boolean onGround = false;
-
-    private int velocityY = 1;
     private long lastDrawNanoTime = -1;
     private GameSurface gameSurface;
+    private float velocityY = 0;
 
     public Ball(GameSurface gameSurface, Bitmap image, int y) {
         super(image,X_AXIS, y);
@@ -26,21 +25,22 @@ public class Ball extends GameObject {
         if(lastDrawNanoTime == -1) {
             lastDrawNanoTime = now;
         }
-
-        int deltaTime = (int) ((now - lastDrawNanoTime)/ 1000000);
+        int deltaTime = (int) ((now - lastDrawNanoTime)/ 2000000);
+        System.out.println(deltaTime);
 
         velocityY += GRAVITY * deltaTime;
         y += velocityY * deltaTime;
 
+
         if(y < 0 )  {
             y = 0;
-            System.out.println("trying to go above");
+            //System.out.println("trying to go above");
         }
 
         else if(y > newBottom)  {
             y = newBottom;
             onGround = true;
-            System.out.println("trying to go below");
+            //System.out.println("trying to go below");
         }
     }
 
@@ -52,7 +52,7 @@ public class Ball extends GameObject {
 
     public void jump() {
         if(onGround) {
-            velocityY = 10;
+            velocityY = -15f;
             System.out.println("trying to jump");
             onGround = false;
         }

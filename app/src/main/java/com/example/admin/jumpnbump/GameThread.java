@@ -12,7 +12,7 @@ public class GameThread extends Thread {
     public GameThread(GameSurface gameSurface, SurfaceHolder surfaceHolder)  {
         this.gameSurface= gameSurface;
         this.surfaceHolder= surfaceHolder;
-        delay = 20;
+        delay = 10;
     }
 
     @Override
