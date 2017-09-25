@@ -12,7 +12,7 @@ import android.view.View;
 public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
     private GameThread gameThread;
     private Ball ball;
-    //private RockObstacle rock1;
+    private Obstacle spike_obstacle;
 
     public GameSurface(Context context)  {
         super(context);
@@ -22,14 +22,14 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update()  {
         ball.update();
-        //this.rock1.update();
+        this.spike_obstacle.update();
     }
 
     @Override
     public void draw(Canvas canvas)  {
         super.draw(canvas);
         ball.draw(canvas);
-        //this.rock1.draw(canvas);
+        this.spike_obstacle.draw(canvas);
 
     }
 
@@ -38,8 +38,8 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
         Bitmap BallBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ball);
         ball = new Ball(this, BallBitmap, 0);
 
-        //Bitmap rockBitmap1 = BitmapFactory.decodeResource(this.getResources(),R.drawable.rock_down1);
-        //this.rock1 = new RockObstacle(this,rockBitmap1,1000, 0);
+        Bitmap spike_obstacleBitmap = BitmapFactory.decodeResource(this.getResources(),R.drawable.spike_obstacle);
+        this.spike_obstacle = new Obstacle(this,spike_obstacleBitmap,1000, 0);
 
         gameThread = new GameThread(this,holder);
         gameThread.setRunning(true);
