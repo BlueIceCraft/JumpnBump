@@ -2,6 +2,10 @@ package com.example.admin.jumpnbump;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+
+import static android.content.Context.SENSOR_SERVICE;
 
 public class Ball extends GameObject {
     private static final int X_AXIS = 250;
@@ -12,10 +16,12 @@ public class Ball extends GameObject {
     private GameSurface gameSurface;
     private float velocityY = 0;
 
+
     public Ball(GameSurface gameSurface, Bitmap image, int y) {
         super(image,X_AXIS, y);
         this.gameSurface= gameSurface;
         this.image = image;
+
     }
 
     public void update()  {

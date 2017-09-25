@@ -1,9 +1,5 @@
 package com.example.admin.jumpnbump;
 
-/**
- * Created by admin on 25.09.2017.
- */
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
@@ -12,7 +8,6 @@ public class Obstacle extends GameObject {
     public static final float VELOCITY = 1.3f;
     private Bitmap image;
 
-    private int movingVectorX = 5;
     private long lastDrawNanoTime = -1;
     private GameSurface gameSurface;
 
@@ -24,22 +19,21 @@ public class Obstacle extends GameObject {
 
     public void update() {
         long now = System.nanoTime();
+        int newBottom = gameSurface.getHeight() - height;
 
         if (lastDrawNanoTime == -1) {
             lastDrawNanoTime = now;
         }
-        int deltaTime = (int) ((now - lastDrawNanoTime) / 1000000);
+        int deltaTime = (int) ((now - lastDrawNanoTime) / 2000000);
 
         float distance = VELOCITY * deltaTime;
-        double movingVectorLength = Math.sqrt(movingVectorX * movingVectorX);
-        this.x = x + (int) (distance * movingVectorX / movingVectorLength);
+        this.x -= distance;
 
         if (this.x < 0) {
             this.x = 0;
-            this.movingVectorX = -this.movingVectorX;
-        } else if (this.x > this.gameSurface.getWidth() - width) {
-            this.x = this.gameSurface.getWidth() - width;
-            this.movingVectorX = -this.movingVectorX;
+        }
+        else if (this.x > newBottom) {
+            this.x = newBottom;
         }
 
     }

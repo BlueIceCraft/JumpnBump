@@ -4,20 +4,27 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 
 public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
     private GameThread gameThread;
     private Ball ball;
     private Obstacle spike_obstacle;
+    private SensorManager sensorManager;
+    private Sensor rotationVectorSensor;
 
     public GameSurface(Context context)  {
         super(context);
         setFocusable(true);
         getHolder().addCallback(this);
+        sensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
+        rotationVectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
     }
 
     public void update()  {
