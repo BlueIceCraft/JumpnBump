@@ -27,9 +27,7 @@ public class Ball extends GameObject {
             lastDrawNanoTime= now;
         }
         int deltaTime = (int) ((now - lastDrawNanoTime)/ 1000000);
-
         float distance = VELOCITY * deltaTime;
-
         double movingVectorLength = Math.sqrt(yAcc*yAcc);
 
         if(canJump) {

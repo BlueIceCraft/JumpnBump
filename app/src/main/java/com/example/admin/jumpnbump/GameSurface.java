@@ -62,7 +62,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent motionEvent) {
+    public boolean onTouchEvent(MotionEvent event) {
         ball.jump();
         return true;
     }
