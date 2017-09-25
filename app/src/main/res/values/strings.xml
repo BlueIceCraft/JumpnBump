@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Jump n\' Bump</string>
+    <string name="starten">Starten</string>
+    <string name="beenden">Beenden</string>
+    <string name="highscores">Highscores</string>
+    <string name="title_activity_highscore">HighscoreActivity</string>
+    <string name="title_gamesurface">GameSurface</string>
+    <string name="title_activity_game">GameActivity</string>
+    <string name="score">Score: </string>
+    <string name="date">Datum:</string>
+</resources>
