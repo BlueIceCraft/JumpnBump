@@ -36,7 +36,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         Bitmap BallBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ball);
-        ball = new Ball(this,BallBitmap,50);
+        ball = new Ball(this, BallBitmap, 200);
 
         //Bitmap rockBitmap1 = BitmapFactory.decodeResource(this.getResources(),R.drawable.rock_down1);
         //this.rock1 = new RockObstacle(this,rockBitmap1,1000, 0);
