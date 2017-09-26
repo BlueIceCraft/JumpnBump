@@ -22,7 +22,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
     private int score;
     private List<Highscore> highscoreList;
     private Context context;
-    private long startTime;
+    private int counter;
 
     public GameSurface(Context context)  {
         super(context);
@@ -32,7 +32,6 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
         obsList = new ArrayList<>();
         this.context = context;
         highscoreList = SaveFileUtils.readScoresFromFile(context);
-        startTime = System.nanoTime();
     }
 
     public void update()  {
@@ -40,8 +39,10 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
         for (Obstacle obs : obsList) {
             obs.update();
         }
-        int multiplier = (int) (startTime - System.nanoTime()) / 1000000000;
-        score = 5 * multiplier;
+        counter++;
+        if(counter % 20 == 0) {
+            score += 5;
+        }
 
         int p1y = ball.getY();
         int p1x = ball.getX();
@@ -105,6 +106,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceDestroyed(SurfaceHolder holder) {
         try {
             gameThread.setRunning(false);
+            gameThread.interrupt();
             gameThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -113,15 +115,18 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
         if(highscoreList.size() == 0) {
             highscoreList.add(highscore);
         }else {
+            boolean add = false;
             for(Highscore hs : highscoreList) {
                 if(score > hs.getScore()) {
-                    highscoreList.add(highscore);
+                   add = true;
                 }
+            }
+            if(add) {
+                highscoreList.add(highscore);
             }
         }
         SaveFileUtils.writeScoresToFile(context, highscoreList);
 
-        System.out.println("intent started");
         Intent gameOverIntent = new Intent(context, GameOverActivity.class);
         gameOverIntent.putExtra("score", score);
         context.startActivity(gameOverIntent);

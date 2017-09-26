@@ -24,8 +24,8 @@ public class GameOverActivity extends Activity {
         mainmenuButton = (Button) findViewById(R.id.mainMenuButton);
         restartButton = (Button) findViewById(R.id.restartButton);
 
-        String score = getIntent().getExtras().getString("score");
-        textView.setText(getString(R.string.score ) + score);
+        int score = getIntent().getExtras().getInt("score");
+        textView.setText(getString(R.string.score ) + " " + score);
 
         mainmenuButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -60,7 +60,7 @@ public class HighscoreAdapter extends ArrayAdapter<Highscore> {
             public void onClick(View v) {
                remove(highscore);
                 notifyDataSetChanged();
-                //TODO: uncomment -> SaveFileUtils.writeScoresToFile(context, highscoreList);
+                SaveFileUtils.writeScoresToFile(context, highscoreList);
             }
         });
 

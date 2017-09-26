@@ -8,7 +8,7 @@
     <string name="title_activity_game">GameActivity</string>
     <string name="title_activity_gameover">GameOverActivity</string>
     <string name="score">Score: </string>
-    <string name="date">Datum:</string>
+    <string name="date">Datum: </string>
     <string name="restartButton">Neustart</string>
     <string name="mainMenuButton">Hauptmenü</string>
 </resources>

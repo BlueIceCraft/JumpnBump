@@ -17,10 +17,9 @@ public class GameThread extends Thread {
 
     @Override
     public void run()  {
-        Canvas canvas;
         while(running)  {
             gameSurface.update();
-            canvas = surfaceHolder.lockCanvas();
+            Canvas canvas = surfaceHolder.lockCanvas();
             if(canvas != null) {
                 synchronized (canvas) {
                     gameSurface.draw(canvas);

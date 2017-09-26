@@ -13,19 +13,19 @@
         android:textSize="50dp"/>
 
     <Button
-        android:id="@+id/mainMenuButton"
+        android:id="@+id/restartButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/restartButton"
         android:layout_centerInParent="true"
-        android:layout_alignParentTop="false"/>
+        android:text="@string/restartButton" />
 
     <Button
-        android:id="@+id/restartButton"
+        android:id="@+id/mainMenuButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/mainMenuButton"
         android:layout_centerInParent="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="120dp"/>
+
 </RelativeLayout>
