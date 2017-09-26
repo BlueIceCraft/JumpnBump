@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/colorBackground">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,14 +15,16 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:textSize="40dp" />
+            android:textSize="40dp"
+            android:textColor="@color/colorBlack"/>
 
         <TextView
             android:id="@+id/score"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/date"
-            android:textSize="40dp" />
+            android:textSize="40dp"
+            android:textColor="@color/colorBlack" />
 
         <ImageButton
             android:id="@+id/deleteScoreButton"
@@ -31,8 +34,5 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
             android:src="@android:drawable/ic_delete" />
-
     </RelativeLayout>
-
-
 </LinearLayout>

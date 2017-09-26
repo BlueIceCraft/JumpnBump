@@ -24,8 +24,7 @@ public class Obstacle extends GameObject {
     public void update() {
         this.x -= speed;
         if (x < 0 - getWidth() - 100) {
-            int pixels = (int) (200 + rd.nextInt(200) * 2f);
-            x = gameSurface.getWidth() + pixels;
+            x = gameSurface.getWidth() + 100;
         }
     }
 

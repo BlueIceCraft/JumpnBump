@@ -18,7 +18,6 @@ public class MainActivity extends Activity {
 
     private Button startGameButton;
     private Button highscoresButton;
-    private Button exitButton;
     private List<Highscore> highscores;
     private String filename = "highscores.json";
     private File saveFile;
@@ -35,7 +34,6 @@ public class MainActivity extends Activity {
 
         startGameButton = (Button) findViewById(R.id.startGameButton);
         highscoresButton = (Button) findViewById(R.id.highscoresButton);
-        exitButton = (Button) findViewById(R.id.exitButton);
 
         if(saveFile.exists()) {
             highscores = SaveFileUtils.readScoresFromFile(this);
@@ -61,14 +59,5 @@ public class MainActivity extends Activity {
                 startActivity(highscoreIntent);
             }
         });
-
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Close App
-               finishAndRemoveTask();
-            }
-        });
-
     }
 }

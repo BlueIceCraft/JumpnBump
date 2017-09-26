@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -19,21 +20,34 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
     private Ball ball;
     private List<Obstacle> obsList;
     private List<Highscore> highscoreList;
-    private Random rd;
     private int score;
-
     private Context context;
     private int counter;
+    private long lastTouch;
 
-    public GameSurface(Context context)  {
+    public GameSurface(Context context) {
         super(context);
+        init(context);
+    }
+
+    public GameSurface(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context);
+    }
+
+    public GameSurface(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        init(context);
+    }
+
+    public void init(Context context)  {
         setFocusable(true);
         getHolder().addCallback(this);
         this.context = context;
-        rd = new Random();
         obsList = new ArrayList<>();
         highscoreList = SaveFileUtils.readScoresFromFile(context);
         score = 0;
+        lastTouch = System.nanoTime();
     }
 
     public void update()  {
@@ -88,7 +102,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         Bitmap ballBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ball);
-        ball = new Ball(this, ballBitmap, 0);
+        ball = new Ball(this, ballBitmap, getHeight());
 
         Bitmap obstacleBlueBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.obstacle_blue);
         Bitmap obstacleGreenBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.obstacle_green);
@@ -98,7 +112,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
         int y1 = 0;
         int y2 = getHeight() - obstacleGreenBitmap.getHeight();
-        float obsVelocity = 1.75f;
+        float obsVelocity = 12f;
 
         Obstacle obstacleBlue = new Obstacle(this, obstacleBlueBitmap, x1, y1, obsVelocity);
         Obstacle obstacleGreen = new Obstacle(this, obstacleGreenBitmap, x2, y2, obsVelocity);
@@ -128,7 +142,12 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        ball.jump();
+        long currentTime = System.nanoTime() - lastTouch;
+        if(currentTime / 100000000 > 2) {
+            System.out.println(currentTime);
+            ball.jump();
+            lastTouch = System.nanoTime();
+        }
         return true;
     }
 }

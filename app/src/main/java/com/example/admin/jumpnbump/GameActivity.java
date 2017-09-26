@@ -13,7 +13,6 @@ public class GameActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         gameSurface = new GameSurface(this);
         setContentView(gameSurface);
     }

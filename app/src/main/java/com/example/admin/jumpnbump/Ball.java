@@ -2,19 +2,18 @@ package com.example.admin.jumpnbump;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
-
-import static android.content.Context.SENSOR_SERVICE;
 
 public class Ball extends GameObject {
     private static final int X_AXIS = 250;
-    public static final float GRAVITY = 0.15f;
+    public static final float GRAVITY = 0.05f;
+    private static final float JUMP_FORCE = -8f;
     private Bitmap image;
     private boolean onGround;
+    private boolean doubleJump;
     private long lastDrawNanoTime = -1;
     private GameSurface gameSurface;
     private float velocityY = 0;
+
 
 
     public Ball(GameSurface gameSurface, Bitmap image, int y) {
@@ -33,8 +32,8 @@ public class Ball extends GameObject {
         }
         int deltaTime = (int) ((now - lastDrawNanoTime)/ 1000000);
 
-        velocityY += GRAVITY * deltaTime * 0.25;
-        y += velocityY * deltaTime * 0.25;
+        velocityY += GRAVITY * deltaTime * 0.5;
+        y += velocityY * deltaTime * 0.5;
 
 
         if(y < 0 )  {
@@ -44,6 +43,7 @@ public class Ball extends GameObject {
         else if(y > newBottom)  {
             y = newBottom;
             onGround = true;
+            doubleJump = true;
         }
     }
 
@@ -54,10 +54,12 @@ public class Ball extends GameObject {
     }
 
     public void jump() {
-        float jumpForce = -20f;
         if(onGround) {
-            velocityY = jumpForce;
             onGround = false;
+            velocityY = JUMP_FORCE;
+        } else if(doubleJump) {
+            doubleJump = false;
+            velocityY = JUMP_FORCE * 4/5;
         }
     }
 }
