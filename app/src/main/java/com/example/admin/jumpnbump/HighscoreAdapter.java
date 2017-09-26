@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +28,8 @@ public class HighscoreAdapter extends ArrayAdapter<Highscore> {
         super(context, R.layout.simple_list_item, highscoreList);
         this.highscoreList = highscoreList;
         this.context = context;
-        sdf = new SimpleDateFormat("HH:mm dd.MM.yy");
+        sdf = new SimpleDateFormat("HH:mm, dd.MM.yy");
+        Collections.sort(highscoreList, new ScoreComparator());
     }
 
     @Override

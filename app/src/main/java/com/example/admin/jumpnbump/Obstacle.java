@@ -2,7 +2,6 @@ package com.example.admin.jumpnbump;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-
 import java.util.Random;
 
 public class Obstacle extends GameObject {
@@ -23,16 +22,7 @@ public class Obstacle extends GameObject {
     }
 
     public void update() {
-        long now = System.nanoTime();
-
-        if (lastDrawNanoTime == -1) {
-            lastDrawNanoTime = now;
-        }
-        int deltaTime = (int) ((now - lastDrawNanoTime) / 2000000);
-
-        float distance = speed * deltaTime;
-        this.x -= distance;
-
+        this.x -= speed;
         if (x < 0 - getWidth() - 100) {
             int pixels = (int) (200 + rd.nextInt(200) * 2f);
             x = gameSurface.getWidth() + pixels;

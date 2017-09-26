@@ -9,7 +9,7 @@ import static android.content.Context.SENSOR_SERVICE;
 
 public class Ball extends GameObject {
     private static final int X_AXIS = 250;
-    public static final float GRAVITY = 0.05f;
+    public static final float GRAVITY = 0.15f;
     private Bitmap image;
     private boolean onGround;
     private long lastDrawNanoTime = -1;
@@ -31,10 +31,10 @@ public class Ball extends GameObject {
         if(lastDrawNanoTime == -1) {
             lastDrawNanoTime = now;
         }
-        int deltaTime = (int) ((now - lastDrawNanoTime)/ 2000000);
+        int deltaTime = (int) ((now - lastDrawNanoTime)/ 1000000);
 
-        velocityY += GRAVITY * deltaTime;
-        y += velocityY * deltaTime;
+        velocityY += GRAVITY * deltaTime * 0.25;
+        y += velocityY * deltaTime * 0.25;
 
 
         if(y < 0 )  {
@@ -54,7 +54,7 @@ public class Ball extends GameObject {
     }
 
     public void jump() {
-        float jumpForce = -10f;
+        float jumpForce = -20f;
         if(onGround) {
             velocityY = jumpForce;
             onGround = false;

@@ -4,11 +4,11 @@ import android.graphics.Bitmap;
 
 public abstract class GameObject {
 
-    protected Bitmap image;
-    protected final int width;
-    protected final int height;
-    protected int x;
-    protected int y;
+    private Bitmap image;
+    private final int width;
+    private final int height;
+    private int x;
+    private int y;
 
     public GameObject(Bitmap image, int x, int y)  {
 

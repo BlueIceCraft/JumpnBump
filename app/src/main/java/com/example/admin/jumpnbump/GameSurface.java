@@ -18,9 +18,10 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
     private GameThread gameThread;
     private Ball ball;
     private List<Obstacle> obsList;
+    private List<Highscore> highscoreList;
     private Random rd;
     private int score;
-    private List<Highscore> highscoreList;
+
     private Context context;
     private int counter;
 
@@ -28,41 +29,48 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
         super(context);
         setFocusable(true);
         getHolder().addCallback(this);
+        this.context = context;
         rd = new Random();
         obsList = new ArrayList<>();
-        this.context = context;
         highscoreList = SaveFileUtils.readScoresFromFile(context);
+        score = 0;
     }
 
     public void update()  {
-        ball.update();
         for (Obstacle obs : obsList) {
             obs.update();
         }
+        ball.update();
+
         counter++;
         if(counter % 20 == 0) {
             score += 5;
         }
 
-        int p1y = ball.getY();
-        int p1x = ball.getX();
-        int p1h = ball.getHeight();
-        int p1w = ball.getWidth();
-        Obstacle obs1 = obsList.get(0);
-        Obstacle obs2 = obsList.get(1);
+        for (Obstacle obs : obsList) {
+            if(ball.getX() > obs.getX() && ball.getX() < obs.getX() + obs.getWidth() && ball.getY() > obs.getY() && ball.getY() < obs.getY() + obs.getHeight()) {
 
-        int r1y = obs1.getY();
-        int r1x = obs1.getX();
-        int r1h = obs1.getHeight();
-        int r1w = obs1.getWidth();
-        int r2y = obs2.getY();
-        int r2x = obs2.getX();
-        int r2h = obs2.getHeight();
-        int r2w = obs2.getWidth();
+                Highscore highscore = new Highscore(new Date(), score);
+                if(highscoreList.size() == 0) {
+                    highscoreList.add(highscore);
+                }
+                else {
+                    int highestScore = 0;
+                    for(Highscore hs : highscoreList) {
+                        if(hs.getScore() > highestScore) {
+                            highestScore = hs.getScore();
+                        }
+                    }
+                    if(score > highestScore) {
+                        highscoreList.add(highscore);
+                    }
+                }
+                SaveFileUtils.writeScoresToFile(context, highscoreList);
 
-        if (r2x <= p1x + p1w && r2x >= p1x || r2x + r2w <= p1x + p1w && r2x + r2w >= p1x){
+                Intent gameOverIntent = new Intent(context, GameOverActivity.class);
+                gameOverIntent.putExtra("score", score);
+                context.startActivity(gameOverIntent);
 
-            if (p1y + p1h >= r2y || p1y <= r1h){
                 surfaceDestroyed(getHolder());
             }
         }
@@ -71,10 +79,10 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void draw(Canvas canvas)  {
         super.draw(canvas);
-        ball.draw(canvas);
         for (Obstacle obs : obsList) {
             obs.draw(canvas);
         }
+        ball.draw(canvas);
     }
 
     @Override
@@ -85,10 +93,15 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
         Bitmap obstacleBlueBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.obstacle_blue);
         Bitmap obstacleGreenBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.obstacle_green);
 
-        int x = this.getWidth() + (int) (200 + rd.nextInt(600) * (1 + rd.nextInt(9)) / 10);
+        int x1 = getWidth() * 1/3;
+        int x2 = (getWidth() + obstacleGreenBitmap.getWidth()) * 5/6;
 
-        Obstacle obstacleBlue = new Obstacle(this, obstacleBlueBitmap, x, 0, 2f);
-        Obstacle obstacleGreen = new Obstacle(this, obstacleGreenBitmap, x, getHeight() - obstacleGreenBitmap.getHeight(), 2f);
+        int y1 = 0;
+        int y2 = getHeight() - obstacleGreenBitmap.getHeight();
+        float obsVelocity = 1.75f;
+
+        Obstacle obstacleBlue = new Obstacle(this, obstacleBlueBitmap, x1, y1, obsVelocity);
+        Obstacle obstacleGreen = new Obstacle(this, obstacleGreenBitmap, x2, y2, obsVelocity);
         obsList.add(obstacleBlue);
         obsList.add(obstacleGreen);
 
@@ -111,25 +124,6 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Highscore highscore = new Highscore(new Date(), score);
-        if(highscoreList.size() == 0) {
-            highscoreList.add(highscore);
-        }else {
-            boolean add = false;
-            for(Highscore hs : highscoreList) {
-                if(score > hs.getScore()) {
-                   add = true;
-                }
-            }
-            if(add) {
-                highscoreList.add(highscore);
-            }
-        }
-        SaveFileUtils.writeScoresToFile(context, highscoreList);
-
-        Intent gameOverIntent = new Intent(context, GameOverActivity.class);
-        gameOverIntent.putExtra("score", score);
-        context.startActivity(gameOverIntent);
     }
 
     @Override
