@@ -51,8 +51,8 @@ public class HighscoreAdapter extends ArrayAdapter<Highscore> {
 
         int score = highscore.getScore();
         Date date = highscore.getDate();
-        viewHolder.score.setText(String.format("%s - %s", context.getString(R.string.score),String.valueOf(score)));
-        viewHolder.date.setText(String.format("%s - %s", context.getString(R.string.date), sdf.format(date)));
+        viewHolder.score.setText(String.format("%s  %s", context.getString(R.string.score), String.valueOf(score)));
+        viewHolder.date.setText(String.format("%s  %s", context.getString(R.string.date), sdf.format(date)));
 
         ImageButton deleteButton = (ImageButton) result.findViewById(R.id.deleteScoreButton);
         deleteButton.setOnClickListener(new View.OnClickListener() {

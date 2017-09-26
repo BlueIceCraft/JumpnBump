@@ -85,7 +85,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
         Bitmap obstacleBlueBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.obstacle_blue);
         Bitmap obstacleGreenBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.obstacle_green);
 
-        int x = this.getWidth() + (int) (200 + rd.nextInt(200) * 2f);
+        int x = this.getWidth() + (int) (200 + rd.nextInt(600) * (1 + rd.nextInt(9)) / 10);
 
         Obstacle obstacleBlue = new Obstacle(this, obstacleBlueBitmap, x, 0, 2f);
         Obstacle obstacleGreen = new Obstacle(this, obstacleGreenBitmap, x, getHeight() - obstacleGreenBitmap.getHeight(), 2f);
