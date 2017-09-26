@@ -109,15 +109,19 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        for(Highscore hs : highscoreList) {
-            if(score > hs.getScore()) {
-                Highscore highscore = new Highscore(new Date(), score);
-                highscoreList.add(highscore);
+        Highscore highscore = new Highscore(new Date(), score);
+        if(highscoreList.size() == 0) {
+            highscoreList.add(highscore);
+        }else {
+            for(Highscore hs : highscoreList) {
+                if(score > hs.getScore()) {
+                    highscoreList.add(highscore);
+                }
             }
         }
         SaveFileUtils.writeScoresToFile(context, highscoreList);
 
+        System.out.println("intent started");
         Intent gameOverIntent = new Intent(context, GameOverActivity.class);
         gameOverIntent.putExtra("score", score);
         context.startActivity(gameOverIntent);
