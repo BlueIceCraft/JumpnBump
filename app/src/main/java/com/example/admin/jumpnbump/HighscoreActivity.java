@@ -12,26 +12,28 @@ import java.util.List;
 
 public class HighscoreActivity extends Activity {
 
+    private ListView mainListView;
     private List<Highscore> highscoreList;
+    private HighscoreAdapter highscoreAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_highscore);
+        mainListView = (ListView) findViewById(R.id.mainListView);
         highscoreList = SaveFileUtils.readScoresFromFile(this);
-        ListView mainListView = (ListView) findViewById(R.id.mainListView);
-        HighscoreAdapter adapter = new HighscoreAdapter(this, highscoreList);
-        mainListView.setAdapter(adapter);
+
+        highscoreAdapter = new HighscoreAdapter(this, highscoreList);
+        mainListView.setAdapter(highscoreAdapter);
     }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            finish();
             Intent mainIntent = new Intent(HighscoreActivity.this, MainActivity.class);
+            mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(mainIntent);
             return true;
         }
-
         return super.onKeyDown(keyCode, event);
     }
 

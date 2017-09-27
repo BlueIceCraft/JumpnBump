@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -21,13 +22,11 @@ public class MainActivity extends Activity {
     private List<Highscore> highscores;
     private String filename = "highscores.json";
     private File saveFile;
-    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        context = getApplicationContext();
 
         saveFile = new File(getApplicationContext().getFilesDir(), filename);
         highscores = new ArrayList<>();
@@ -59,5 +58,14 @@ public class MainActivity extends Activity {
                 startActivity(highscoreIntent);
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            finishAndRemoveTask();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
