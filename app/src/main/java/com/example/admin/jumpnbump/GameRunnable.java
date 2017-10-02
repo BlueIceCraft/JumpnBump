@@ -3,16 +3,17 @@ package com.example.admin.jumpnbump;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
-public class GameThread extends Thread {
-    private boolean running;
+public class GameRunnable implements Runnable {
+    private volatile boolean running;
     private GameSurface gameSurface;
     private SurfaceHolder surfaceHolder;
     private int delay;
 
-    public GameThread(GameSurface gameSurface, SurfaceHolder surfaceHolder)  {
-        this.gameSurface= gameSurface;
+    public GameRunnable(GameSurface gameSurface, SurfaceHolder surfaceHolder)  {
+        this.gameSurface = gameSurface;
         this.surfaceHolder = surfaceHolder;
-        delay = 10;
+        this.delay = 10;
+        this.running = false;
     }
 
     @Override
@@ -26,6 +27,7 @@ public class GameThread extends Thread {
                 }
                 surfaceHolder.unlockCanvasAndPost(canvas);
             }
+
             try {
                 Thread.sleep(delay);
             } catch(InterruptedException e) {
@@ -35,6 +37,6 @@ public class GameThread extends Thread {
     }
 
     public void setRunning(boolean running)  {
-        this.running= running;
+        this.running = running;
     }
 }

@@ -5,52 +5,44 @@ import android.graphics.Canvas;
 
 public class Ball extends GameObject {
     private static final int X_AXIS = 250;
-    public static final float GRAVITY = 0.05f;
-    private static final float JUMP_FORCE = -8f;
+    private static final float GRAVITY = 0.5f;
+    private static final float JUMP_FORCE = -25f;
+    private static final float AIRTIME_MULTIPLIER = 2f;
+    private static final float DOUBLEJUMP_MULTIPLIER = 0.8f;
+    private static final float BOUNCE_MULTIPLIER = -0.5F;
     private Bitmap image;
     private boolean onGround;
     private boolean doubleJump;
-    private long lastDrawNanoTime = -1;
     private GameSurface gameSurface;
-    private float velocityY = 0;
-
-
+    private float velocityY;
+    private int newBottom;
 
     public Ball(GameSurface gameSurface, Bitmap image, int y) {
         super(image,X_AXIS, y);
         this.gameSurface= gameSurface;
         this.image = image;
-
+        this.newBottom = gameSurface.getHeight() - getHeight();
     }
 
     public void update()  {
-        long now = System.nanoTime();
-        int newBottom = gameSurface.getHeight() - getHeight();
+        velocityY += GRAVITY * AIRTIME_MULTIPLIER;
+        y += velocityY * AIRTIME_MULTIPLIER;
 
-        if(lastDrawNanoTime == -1) {
-            lastDrawNanoTime = now;
-        }
-        int deltaTime = (int) ((now - lastDrawNanoTime)/ 1000000);
-
-        velocityY += GRAVITY * deltaTime * 0.5;
-        y += velocityY * deltaTime * 0.5;
-
-
-        if(y < 0 )  {
+        if(y < 0 ) {
             y = 0;
-        }
-
-        else if(y > newBottom)  {
+        } else if(y > newBottom)  {
             y = newBottom;
+            velocityY = velocityY * BOUNCE_MULTIPLIER;
+            if(velocityY < 1 && velocityY > -1) {
+                velocityY = 0;
+            }
             onGround = true;
             doubleJump = true;
         }
     }
 
     public void draw(Canvas canvas)  {
-        Bitmap image = this.image;
-        canvas.drawBitmap(image,X_AXIS, y, null);
-        this.lastDrawNanoTime= System.nanoTime();
+        canvas.drawBitmap(image, X_AXIS, y, null);
     }
 
     public void jump() {
@@ -59,7 +51,7 @@ public class Ball extends GameObject {
             velocityY = JUMP_FORCE;
         } else if(doubleJump) {
             doubleJump = false;
-            velocityY = JUMP_FORCE * 4/5;
+            velocityY = JUMP_FORCE * DOUBLEJUMP_MULTIPLIER;
         }
     }
 }

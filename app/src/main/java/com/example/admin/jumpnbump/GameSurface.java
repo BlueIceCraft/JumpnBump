@@ -11,12 +11,13 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
-    private GameThread gameThread;
+    private GameRunnable gameRunnable;
+    private Thread gameThread;
     private Ball ball;
     private List<Obstacle> obsList;
     private List<Highscore> highscoreList;
@@ -24,6 +25,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
     private Context context;
     private int counter;
     private long lastTouch;
+    private float obsVelocity;
 
     public GameSurface(Context context) {
         super(context);
@@ -46,8 +48,9 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
         this.context = context;
         obsList = new ArrayList<>();
         highscoreList = SaveFileUtils.readScoresFromFile(context);
-        score = 0;
         lastTouch = System.nanoTime();
+        obsVelocity = 20f;
+        score = 0;
     }
 
     public void update()  {
@@ -61,25 +64,21 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
             score += 5;
         }
 
-        for (Obstacle obs : obsList) {
-            if(ball.getX() > obs.getX() && ball.getX() < obs.getX() + obs.getWidth() && ball.getY() > obs.getY() && ball.getY() < obs.getY() + obs.getHeight()) {
+        for (Obstacle obstacle : obsList) {
+            if(ball.getX() <= obstacle.getX() + obstacle.getWidth() && ball.getX() + ball.getWidth() >= obstacle.getX() &&
+                    ball.getY() <= obstacle.getY() + obstacle.getHeight() && ball.getY() + ball.getHeight() >= obstacle.getY()) {
 
                 Highscore highscore = new Highscore(new Date(), score);
-                if(highscoreList.size() == 0) {
+                int highestScore = 0;
+                for(Highscore hs : highscoreList) {
+                    if(hs.getScore() > highestScore) {
+                        highestScore = hs.getScore();
+                    }
+                }
+                if(score > highestScore) {
                     highscoreList.add(highscore);
+                    SaveFileUtils.writeScoresToFile(context, highscoreList);
                 }
-                else {
-                    int highestScore = 0;
-                    for(Highscore hs : highscoreList) {
-                        if(hs.getScore() > highestScore) {
-                            highestScore = hs.getScore();
-                        }
-                    }
-                    if(score > highestScore) {
-                        highscoreList.add(highscore);
-                    }
-                }
-                SaveFileUtils.writeScoresToFile(context, highscoreList);
 
                 Intent gameOverIntent = new Intent(context, GameOverActivity.class);
                 gameOverIntent.putExtra("score", score);
@@ -112,15 +111,15 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
         int y1 = 0;
         int y2 = getHeight() - obstacleGreenBitmap.getHeight();
-        float obsVelocity = 12f;
 
         Obstacle obstacleBlue = new Obstacle(this, obstacleBlueBitmap, x1, y1, obsVelocity);
         Obstacle obstacleGreen = new Obstacle(this, obstacleGreenBitmap, x2, y2, obsVelocity);
-        obsList.add(obstacleBlue);
-        obsList.add(obstacleGreen);
+        Collections.addAll(obsList, obstacleBlue, obstacleGreen);
 
-        gameThread = new GameThread(this, holder);
-        gameThread.setRunning(true);
+        gameRunnable = new GameRunnable(this, holder);
+        gameRunnable.setRunning(true);
+
+        gameThread = new Thread(gameRunnable);
         gameThread.start();
     }
 
@@ -131,8 +130,8 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        gameRunnable.setRunning(false);
         try {
-            gameThread.setRunning(false);
             gameThread.interrupt();
             gameThread.join();
         } catch (InterruptedException e) {
@@ -142,11 +141,12 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        long currentTime = System.nanoTime() - lastTouch;
-        if(currentTime / 100000000 > 2) {
-            System.out.println(currentTime);
-            ball.jump();
-            lastTouch = System.nanoTime();
+        if(event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+            long currentTime = System.nanoTime() - lastTouch;
+            if(currentTime / 100000000 > 2) {
+                ball.jump();
+                lastTouch = System.nanoTime();
+            }
         }
         return true;
     }

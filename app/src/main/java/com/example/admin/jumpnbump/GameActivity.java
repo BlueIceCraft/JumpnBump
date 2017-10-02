@@ -25,7 +25,6 @@ public class GameActivity extends Activity {
             startActivity(mainIntent);
             return true;
         }
-
         return super.onKeyDown(keyCode, event);
     }
 }

@@ -40,11 +40,9 @@ public class MainActivity extends Activity {
             SaveFileUtils.writeScoresToFile(this, highscores);
         }
 
-
         startGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Start Game
                 Intent gameIntent = new Intent(MainActivity.this, GameActivity.class);
                 startActivity(gameIntent);
             }
@@ -53,7 +51,6 @@ public class MainActivity extends Activity {
         highscoresButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Show Highscore-View
                 Intent highscoreIntent = new Intent(MainActivity.this, HighscoreActivity.class);
                 startActivity(highscoreIntent);
             }

@@ -11,27 +11,27 @@ public abstract class GameObject {
     protected int y;
 
     public GameObject(Bitmap image, int x, int y)  {
-
         this.image = image;
 
-        this.x= x;
-        this.y= y;
+        this.x = x;
+        this.y = y;
 
         this.width = image.getWidth();
         this.height = image.getHeight();
     }
 
     public int getX()  {
-        return this.x;
-    }
-    public int getY()  {
-        return this.y;
+        return x;
     }
 
+    public int getY()  {
+        return y;
+    }
 
     public int getHeight() {
         return height;
     }
+
     public int getWidth() {
         return width;
     }
