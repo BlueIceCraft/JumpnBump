@@ -6,22 +6,24 @@ import android.graphics.Canvas;
 public class Ball extends GameObject {
     private static final int X_AXIS = 250;
     private static final float GRAVITY = 0.5f;
-    private static final float JUMP_FORCE = -25f;
-    private static final float AIRTIME_MULTIPLIER = 2f;
-    private static final float DOUBLEJUMP_MULTIPLIER = 0.8f;
+    private static final float JUMP_FORCE = -22f;
+    private static final float AIRTIME_MULTIPLIER = 0.3f;
+    private static final float DOUBLEJUMP_MULTIPLIER = 0.9f;
     private static final float BOUNCE_MULTIPLIER = -0.5F;
-    private Bitmap image;
+    private final int actualBottom;
     private boolean onGround;
     private boolean doubleJump;
-    private GameSurface gameSurface;
     private float velocityY;
-    private int newBottom;
+    private Bitmap image;
+    //private GameSurface gameSurface;
+
+
 
     public Ball(GameSurface gameSurface, Bitmap image, int y) {
         super(image,X_AXIS, y);
-        this.gameSurface= gameSurface;
+        //this.gameSurface = gameSurface;
         this.image = image;
-        this.newBottom = gameSurface.getHeight() - getHeight();
+        this.actualBottom = gameSurface.getHeight() - getHeight();
     }
 
     public void update()  {
@@ -30,11 +32,14 @@ public class Ball extends GameObject {
 
         if(y < 0 ) {
             y = 0;
-        } else if(y > newBottom)  {
-            y = newBottom;
-            velocityY = velocityY * BOUNCE_MULTIPLIER;
-            if(velocityY < 1 && velocityY > -1) {
+        }
+
+        if(y > actualBottom)  {
+            y = actualBottom - 1;
+            if(velocityY < 7f && velocityY > -7f) {
                 velocityY = 0;
+            } else {
+                velocityY = velocityY * BOUNCE_MULTIPLIER;
             }
             onGround = true;
             doubleJump = true;

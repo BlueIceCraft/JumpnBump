@@ -24,7 +24,6 @@ public class Obstacle extends GameObject {
     }
 
     public void draw(Canvas canvas) {
-        Bitmap image = this.image;
         canvas.drawBitmap(image, x, y, null);
     }
 }

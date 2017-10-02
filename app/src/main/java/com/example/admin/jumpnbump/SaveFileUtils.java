@@ -51,4 +51,9 @@ public final class SaveFileUtils {
             e.printStackTrace();
         }
     }
+
+    public static File getSaveFile(Context context) {
+        File saveFile = new File(context.getFilesDir(), filename);
+        return saveFile;
+    }
 }
