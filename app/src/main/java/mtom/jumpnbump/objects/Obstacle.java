@@ -1,25 +1,25 @@
-package com.example.admin.jumpnbump;
+package mtom.jumpnbump.objects;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-public class Obstacle extends GameObject {
+import mtom.jumpnbump.game.GameSurface;
 
-    private Bitmap image;
-    private GameSurface gameSurface;
+public class Obstacle extends GameObject {
     private float speed;
+    private int screenWidth;
 
     public Obstacle(GameSurface gameSurface, Bitmap image, int x, int y, float speed) {
         super(image, x, y);
-        this.gameSurface = gameSurface;
         this.image = image;
         this.speed = speed;
+        screenWidth = gameSurface.getWidth();
     }
 
     public void update() {
         this.x -= speed;
-        if (x < 0 - getWidth() - 100) {
-            x = gameSurface.getWidth() + 100;
+        if (x < 0 - getWidth()) {
+            x = screenWidth + getWidth();
         }
     }
 

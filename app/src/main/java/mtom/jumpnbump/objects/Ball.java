@@ -1,7 +1,9 @@
-package com.example.admin.jumpnbump;
+package mtom.jumpnbump.objects;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+
+import mtom.jumpnbump.game.GameSurface;
 
 public class Ball extends GameObject {
     private static final int X_AXIS = 250;
@@ -14,15 +16,9 @@ public class Ball extends GameObject {
     private boolean onGround;
     private boolean doubleJump;
     private float velocityY;
-    private Bitmap image;
-    //private GameSurface gameSurface;
-
-
 
     public Ball(GameSurface gameSurface, Bitmap image, int y) {
         super(image,X_AXIS, y);
-        //this.gameSurface = gameSurface;
-        this.image = image;
         this.actualBottom = gameSurface.getHeight() - getHeight();
     }
 

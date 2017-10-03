@@ -1,7 +1,8 @@
-package com.example.admin.jumpnbump;
+package mtom.jumpnbump.utilities;
 
 import android.content.Context;
 
+import mtom.jumpnbump.objects.Highscore;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;

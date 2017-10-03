@@ -1,4 +1,4 @@
-package com.example.admin.jumpnbump;
+package mtom.jumpnbump.objects;
 
 import android.graphics.Bitmap;
 

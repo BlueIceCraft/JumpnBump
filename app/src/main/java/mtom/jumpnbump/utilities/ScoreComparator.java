@@ -1,4 +1,6 @@
-package com.example.admin.jumpnbump;
+package mtom.jumpnbump.utilities;
+
+import mtom.jumpnbump.objects.Highscore;
 
 import java.util.Comparator;
 

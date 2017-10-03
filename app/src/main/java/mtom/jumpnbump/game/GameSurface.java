@@ -1,14 +1,20 @@
-package com.example.admin.jumpnbump;
+package mtom.jumpnbump.game;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.example.admin.jumpnbump.R;
+import mtom.jumpnbump.objects.Ball;
+import mtom.jumpnbump.objects.Highscore;
+import mtom.jumpnbump.objects.Obstacle;
+import mtom.jumpnbump.utilities.GameFinishedListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,37 +22,19 @@ import java.util.Date;
 import java.util.List;
 
 public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
-    private static final float obsVelocity = 2.5f;
+    private static final float obsVelocity = 3f;
     private GameThread gameThread;
     private Ball ball;
     private List<Obstacle> obsList;
-    private List<Highscore> highscoreList;
-    private Context context;
+    private GameFinishedListener listener;
     private int score;
     private int counter;
 
-
-    public GameSurface(Context context) {
+    public GameSurface(Context context)  {
         super(context);
-        init(context);
-    }
-
-    public GameSurface(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(context);
-    }
-
-    public GameSurface(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        init(context);
-    }
-
-    public void init(Context context)  {
         setFocusable(true);
         getHolder().addCallback(this);
-        this.context = context;
         obsList = new ArrayList<>();
-        highscoreList = SaveFileUtils.readScoresFromFile(context);
         score = 0;
     }
 
@@ -57,7 +45,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
         ball.update();
 
         counter++;
-        if(counter % 100 == 0) {
+        if(counter % 50 == 0) {
             score += 5;
         }
 
@@ -66,23 +54,8 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
                     ball.getY() <= obstacle.getY() + obstacle.getHeight() && ball.getY() + ball.getHeight() >= obstacle.getY()) {
 
                 Highscore highscore = new Highscore(new Date(), score);
-                int highestScore = 0;
-                for(Highscore hs : highscoreList) {
-                    if(hs.getScore() > highestScore) {
-                        highestScore = hs.getScore();
-                    }
-                }
-                if(score > highestScore) {
-                    highscoreList.add(highscore);
-                    SaveFileUtils.writeScoresToFile(context, highscoreList);
-                }
-
-                Intent gameOverIntent = new Intent(context, GameOverActivity.class);
-                gameOverIntent.putExtra("score", score);
-                gameOverIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                context.startActivity(gameOverIntent);
+                listener.onGameFinished(highscore);
                 surfaceDestroyed(getHolder());
-                //context = null;
             }
         }
     }
@@ -98,13 +71,13 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        Bitmap ballBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ball);
+        Bitmap ballBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ball);
         ball = new Ball(this, ballBitmap, getHeight());
 
         Bitmap obstacleBlueBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.obstacle_blue);
         Bitmap obstacleGreenBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.obstacle_green);
 
-        int x1 = getWidth() * 1/3;
+        int x1 = getWidth() * 1/4;
         int x2 = (getWidth() + obstacleGreenBitmap.getWidth()) * 5/6;
 
         int y1 = 0;
@@ -140,5 +113,9 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
             ball.jump();
         }
         return true;
+    }
+
+    public void setGameFinishedListener(GameFinishedListener listener) {
+        this.listener = listener;
     }
 }

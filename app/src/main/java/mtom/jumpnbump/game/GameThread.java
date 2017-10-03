@@ -1,10 +1,10 @@
-package com.example.admin.jumpnbump;
+package mtom.jumpnbump.game;
 
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
 public class GameThread extends Thread {
-    private final static int 	MAX_FPS = 60;
+    private final static int 	MAX_FPS = 40;
     private final static int	MAX_FRAME_SKIPS = 5;
     private final static int	FRAME_PERIOD = 1000 / MAX_FPS;
     private volatile boolean running = true;
@@ -22,17 +22,19 @@ public class GameThread extends Thread {
         long timeDiff;
         int sleepTime;
         int framesSkipped;
+        Canvas canvas;
 
         while (running) {
-            Canvas canvas = surfaceHolder.lockCanvas();
+            canvas = surfaceHolder.lockCanvas();
             if (canvas != null) {
                 synchronized (canvas) {
                     beginTime = System.nanoTime();
                     framesSkipped = 0;
                     gameSurface.update();
                     gameSurface.draw(canvas);
+                    surfaceHolder.unlockCanvasAndPost(canvas);
                     timeDiff = System.nanoTime() - beginTime;
-                    sleepTime = (int)(FRAME_PERIOD - timeDiff);
+                    sleepTime = (int) (FRAME_PERIOD - timeDiff);
 
                     if (sleepTime > 0) {
                         try {
@@ -47,7 +49,6 @@ public class GameThread extends Thread {
                             framesSkipped++;
                         }
                     }
-                    surfaceHolder.unlockCanvasAndPost(canvas);
                 }
             }
         }
