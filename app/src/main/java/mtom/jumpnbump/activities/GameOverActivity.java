@@ -21,9 +21,9 @@ public class GameOverActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_over);
 
-        textView = (TextView) findViewById(R.id.textView);
-        mainmenuButton = (Button) findViewById(R.id.mainMenuButton);
-        restartButton = (Button) findViewById(R.id.restartButton);
+        textView = findViewById(R.id.textView);
+        mainmenuButton = findViewById(R.id.mainMenuButton);
+        restartButton = findViewById(R.id.restartButton);
 
         int score = getIntent().getExtras().getInt("score");
         textView.setText(getString(R.string.score ) + " " + score);

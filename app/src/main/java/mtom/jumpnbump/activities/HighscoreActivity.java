@@ -17,17 +17,14 @@ public class HighscoreActivity extends Activity {
 
     private ListView mainListView;
     private List<Highscore> highscoreList;
-    private HighscoreAdapter highscoreAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_highscore);
-        mainListView = (ListView) findViewById(R.id.mainListView);
+        mainListView = findViewById(R.id.mainListView);
         highscoreList = SaveFileUtils.readScoresFromFile(this);
-
-        highscoreAdapter = new HighscoreAdapter(this, highscoreList);
-        mainListView.setAdapter(highscoreAdapter);
+        mainListView.setAdapter(new HighscoreAdapter(this, highscoreList));
     }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

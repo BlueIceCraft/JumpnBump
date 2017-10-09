@@ -31,8 +31,8 @@ public class MainActivity extends Activity {
         saveFile = SaveFileUtils.getSaveFile(getApplicationContext());
         highscores = new ArrayList<>();
 
-        startGameButton = (Button) findViewById(R.id.startGameButton);
-        highscoresButton = (Button) findViewById(R.id.highscoresButton);
+        startGameButton = findViewById(R.id.startGameButton);
+        highscoresButton = findViewById(R.id.highscoresButton);
 
         if(saveFile.exists()) {
             highscores = SaveFileUtils.readScoresFromFile(this);
